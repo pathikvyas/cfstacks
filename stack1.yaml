@@ -44,22 +44,26 @@ Resources:
     Properties: 
       VpcId: !Ref CFVPC
       Tags:
-       - Key: Name
-       Value: Web
+        - Key: Name
+          Value: Web
   myRoute:
     Type: "AWS::EC2::SubnetRouteTableAssociation"
     Properties:
       RouteTableId:
+        Ref: myRouteTable
+      SubnetId:
+        Ref: CFSubnetA
 
-  myCarrierRoute:
-    Type: AWS::EC2::Route
-    DependsOn: GatewayToInternetAndCarrierNetwork
-    Properties:
-       RouteTableId:
-         Ref: myRouteTable
-       DestinationCidrBlock: 0.0.0.0/0
-       GatewayId:
-         Ref: myCarrierGateway 
+  # myCarrierRoute:
+  #   Type: AWS::EC2::Route
+  #   DependsOn: GatewayToInternetAndCarrierNetwork
+  #   Properties:
+  #      RouteTableId:
+  #        Ref: myRouteTable
+  #      DestinationCidrBlock: 0.0.0.0/0
+  #      GatewayId:
+  #        Ref: myCarrierGateway
+
 Outputs:
   CFVPCID:
     Description: "The VPC ID of CFVPC"
