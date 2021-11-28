@@ -15,12 +15,11 @@ Resources:
   WebAppInstance:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-077cfbfe93cf8b059
+      ImageId: ami-04ad2567c9e3d7893
       InstanceType: t2.micro
-      KeyName: edXLinux.pem
+      KeyName: MyKeyPair
       SecurityGroupIds:
         - !Ref WebAppSecurityGroup
-
   WebAppSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
