@@ -18,27 +18,9 @@ Resources:
       ImageId: ami-077cfbfe93cf8b059
       InstanceType: t2.micro
       KeyName: edXLinux.pem
-      SecurityGroupIds:
-        - !Ref WebAppSecurityGroup
+      # SecurityGroupIds:
+        # - !Ref WebAppSecurityGroup
 
-  WebAppSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupName: !Join ["-", [webapp-security-group, dev]]
-      GroupDescription: "Allow HTTP/HTTPS and SSH inbound and outbound traffic"
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 443
-          ToPort: 443
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
   CFVPC:
     Type: "AWS::EC2::VPC"
     Properties:
