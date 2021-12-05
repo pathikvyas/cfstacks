@@ -17,13 +17,23 @@ Resources:
       Tags:
         - Key: Name
           Value: CFMyVPC
-  CFSubnet:
+  CFSubnetA:
     Type: "AWS::EC2::Subnet"
     Properties: 
-      AvailabilityZone: !Select [0,!GetAZs '']
-      CidrBlock: !FindInMap [SubnetConfig, Subnet1, CIDR]
-      Vpcid: !Ref CFVPC
+      AvailabilityZone: !Select [0,!GetAZs ]
+      CidrBlock: !FindInMap [ SubnetConfig , Subnet1, CIDR ]
+      VpcId: !Ref CFVPC
       Tags:
         - Key: Name
           Value: Mysubnet1
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    DependsOn: CFVPC
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+      # Notice how you can't attach an IGW to a VPC unless both are created:
+    Properties:
+      VpcId: !Ref CFVPC
+      InternetGatewayId: !Ref InternetGateway
+      
 
