@@ -1,0 +1,31 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Front End dev team's network stack"
+
+Mappings:
+  VPCCIDR:  # Mapping ID
+    FEDEVVPC:  #Top level key
+      CIDR: "10.10.0.0/20"   #Second level key: "value"
+
+  SubnetCIDR:  # Mapping ID
+    FEPUBSubnet1: #Top level key
+      CIDR: "10.10.0.0/24"  #Second level key: "value"
+
+Resources:
+  VPC1:       # Logical ID of a VPC
+    Type: AWS::EC2::VPC
+    Properties: 
+      CidrBlock: !FindInMap [VPCCIDR, FEDEVVPC, CIDR]
+      Tags: 
+        - Key: Name
+          Value: VPC1
+
+  PublicSubnet1:  # Logical ID of a subnet
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      CidrBlock: !FindInMap [SubnetCIDR, FEPUBSubnet1, CIDR]
+      VpcId: !Ref VPC1
+      Tags:
+        - Key: Name
+          Value: PublicSubnet1
+
