@@ -12,15 +12,6 @@ Mappings:
     Subnet3:
       CIDR: "10.50.3.0/24"
 Resources: 
-  WebAppInstance:
-    Type: AWS::EC2::Instance
-    Properties:
-      ImageId: ami-077cfbfe93cf8b059
-      InstanceType: t2.micro
-      KeyName: edXLinux.pem
-      # SecurityGroupIds:
-        # - !Ref WebAppSecurityGroup
-
   CFVPC:
     Type: "AWS::EC2::VPC"
     Properties:

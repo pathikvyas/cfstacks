@@ -12,14 +12,7 @@ Mappings:
     Subnet3:
       CIDR: "10.50.3.0/24"
 Resources: 
-  WebAppInstance:
-    Type: AWS::EC2::Instance
-    Properties:
-      ImageId: ami-04ad2567c9e3d7893
-      InstanceType: t2.micro
-      KeyName: MyKeyPair
-      SecurityGroupIds:
-        - !Ref WebAppSecurityGroup
+
   WebAppSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -80,7 +73,16 @@ Resources:
       SubnetId:
         Ref: CFSubnetA
 
-  # myCarrierRoute:
+  # WebAppInstance:
+  #   Type: AWS::EC2::Instance
+  #   Properties:
+  #     ImageId: ami-028f2b5ee08012131
+  #     InstanceType: t2.micro
+  #     KeyName: MyKeyPair
+  #     SecurityGroupIds:
+  #       - !Ref WebAppSecurityGroup
+  #     SubnetId: !Ref CFSubnetA
+  # # myCarrierRoute:
   #   Type: AWS::EC2::Route
   #   DependsOn: GatewayToInternetAndCarrierNetwork
   #   Properties:

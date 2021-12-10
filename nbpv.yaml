@@ -1,0 +1,96 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Front End dev team's network stack"
+
+Mappings:
+  VPCCIDR:  # Mapping ID
+    FEDEVVPC:  #Top level key
+      CIDR: "10.10.0.0/20"   #Second level key: "value"
+
+  PUBSubnetCIDR:  # Mapping ID
+    FEPUBSubnet1: #Top level key
+      CIDR: "10.10.0.0/24"  #Second level key: "value"
+  
+  PRSubnetCIDR: # Mapping ID
+    FEPRISubnet1: #Top level key
+      CIDR: "10.10.1.0/24" #Second level key: "value"
+
+Resources:
+  VPC1:       # Logical ID of a VPC
+    Type: AWS::EC2::VPC
+    Properties: 
+      CidrBlock: !FindInMap [VPCCIDR, FEDEVVPC, CIDR]
+      Tags: 
+        - Key: Name
+          Value: VPC1
+
+  PublicSubnet1:  # Logical ID of a subnet
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      CidrBlock: !FindInMap [PUBSubnetCIDR, FEPUBSubnet1, CIDR]
+      VpcId: !Ref VPC1
+      Tags:
+        - Key: Name
+          Value: PublicSubnet1
+  PrivateSubnet1: # Logical ID ofa subnet
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      CidrBlock: !FindInMap [PRSubnetCIDR, FEPRISubnet1, CIDR]
+      VpcId: !Ref VPC1
+      Tags:
+        - Key: Name
+          Value: PrivateSubnet1
+
+  VPC1IGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: VPC1IGW
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC1
+      InternetGatewayId: !Ref VPC1IGW
+  
+  DefaultRouteTable:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref VPC1
+      Tags: 
+        - Key: Name 
+          Value: DefaultRouteTable
+  DefaultRTRoute:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      RouteTableID: !Ref DefaultRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref VPC1IGW
+Outputs:
+  VPC1ID:
+    Description: "The VPC ID of VPC1"
+    Value: !Ref VPC1
+    Export:
+      Name: !Sub "${AWS::StackName}-VPC1-ID"
+  PublicSubnet1ID:
+    Description: "The subnet ID of Public Subnet"
+    Value: !Ref PublicSubnet1
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicSubnet1-ID"
+  PrivateSubnet1ID:
+    Description: "The subnet ID of Private Subnet"
+    Value: !Ref PrivateSubnet1
+    Export:
+      Name: !Sub "${AWS::StackName}-PrivateSubnet1-ID"
+  InternetGatewayId:
+    Description: "The Internet Gateway ID of IGW connected to VPC"
+    Value: !Ref VPC1IGW
+    Export:
+      Name: !Sub "${AWS::StackName}-InternetGateway-ID"
+  DefaultRouteTableID:
+    Description: "The ID of Default Route Table Created"
+    Value: !Ref DefaultRouteTable
+    Export:
+      Name: !Sub "${AWS::StackName}-DefaultRouteTableID"
+
+    
